@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CleanDds.Application\CleanDds.Application.csproj" />
+    <ProjectReference Include="..\CleanDds.Common\CleanDds.Common.csproj" />
+    <ProjectReference Include="..\CleanDds.Domain\CleanDds.Domain.csproj" />
+  </ItemGroup>
+</Project>
