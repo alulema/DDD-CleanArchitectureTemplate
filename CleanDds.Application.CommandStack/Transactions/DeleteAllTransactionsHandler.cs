@@ -19,7 +19,7 @@ namespace CleanDds.Application.CommandStack.Transactions
             _logger = serviceProvider.GetService<ILogger<DeleteAllTransactionsHandler>>();
         }
 
-        public Task Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Executing 'Delete All Transactions' Command");
 
@@ -34,7 +34,7 @@ namespace CleanDds.Application.CommandStack.Transactions
                 throw;
             }
 
-            return Task.CompletedTask;
+            return Unit.Task;
         }
     }
 }

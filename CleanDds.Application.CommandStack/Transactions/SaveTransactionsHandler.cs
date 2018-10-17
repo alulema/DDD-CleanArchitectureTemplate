@@ -18,8 +18,8 @@ namespace CleanDds.Application.CommandStack.Transactions
             _database = serviceProvider.GetService<IDatabaseService>();
             _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
         }
-        
-        public Task Handle(SaveTransactions request, CancellationToken cancellationToken)
+
+        public Task<Unit> Handle(SaveTransactions request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Executing 'Save Transactions' Command");
 
@@ -36,7 +36,7 @@ namespace CleanDds.Application.CommandStack.Transactions
                 throw;
             }
 
-            return Task.CompletedTask;
+            return Unit.Task;
         }
     }
 }

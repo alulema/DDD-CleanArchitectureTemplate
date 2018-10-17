@@ -19,7 +19,7 @@ namespace CleanDds.Application.CommandStack.Rates
             _logger = serviceProvider.GetService<ILogger<DeleteAllRatesHandler>>();
         }
 
-        public Task Handle(DeleteAllRates request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(DeleteAllRates request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Executing 'Delete All Rates' Command");
 
@@ -34,7 +34,7 @@ namespace CleanDds.Application.CommandStack.Rates
                 throw;
             }
 
-            return Task.CompletedTask;
+            return Unit.Task;
         }
     }
 }

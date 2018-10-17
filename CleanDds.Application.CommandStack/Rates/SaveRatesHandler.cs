@@ -19,7 +19,7 @@ namespace CleanDds.Application.CommandStack.Rates
             _logger = serviceProvider.GetService<ILogger<SaveRatesHandler>>();
         }
 
-        public Task Handle(SaveRates request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(SaveRates request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Executing 'Save Rates' Command");
 
@@ -36,7 +36,7 @@ namespace CleanDds.Application.CommandStack.Rates
                 throw;
             }
 
-            return Task.CompletedTask;
+            return Unit.Task;
         }
     }
 }
