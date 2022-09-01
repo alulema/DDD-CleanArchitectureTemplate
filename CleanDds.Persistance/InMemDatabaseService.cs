@@ -5,47 +5,46 @@ using CleanDds.Domain.Currencies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Persistance
+namespace CleanDds.Persistance;
+
+public class InMemDatabaseService : DbContext, IDatabaseService
 {
-    public class InMemDatabaseService : DbContext, IDatabaseService
+    private readonly ILogger _logger;
+    public DbSet<Rate> Rates { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+
+    public InMemDatabaseService(DbContextOptions<InMemDatabaseService> options, ILogger<InMemDatabaseService> logger) : base(options)
     {
-        private readonly ILogger _logger;
-        public DbSet<Rate> Rates { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        _logger = logger;
+    }
+    
+    public async Task SaveAsync()
+    {
+        _logger.LogInformation("Asynchronously saving data to in-mem database");
 
-        public InMemDatabaseService(DbContextOptions<InMemDatabaseService> options, ILogger<InMemDatabaseService> logger) : base(options)
+        try
         {
-            _logger = logger;
+            await SaveChangesAsync();
         }
-        
-        public async Task SaveAsync()
+        catch (Exception e)
         {
-            _logger.LogInformation("Asynchronously saving data to in-mem database");
-
-            try
-            {
-                await SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error saving data");
-                throw;
-            }
+            _logger.LogError(e, "Error saving data");
+            throw;
         }
+    }
 
-        public void Save()
+    public void Save()
+    {
+        _logger.LogInformation("Saving data to in-mem database");
+
+        try
         {
-            _logger.LogInformation("Saving data to in-mem database");
-
-            try
-            {
-                SaveChanges();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error seesavingding data");
-                throw;
-            }
+            SaveChanges();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error seesavingding data");
+            throw;
         }
     }
 }

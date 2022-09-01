@@ -6,35 +6,34 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Application.CommandStack.Transactions
+namespace CleanDds.Application.CommandStack.Transactions;
+
+public class DeleteAllTransactionsHandler : IRequestHandler<DeleteAllTransactions>
 {
-    public class DeleteAllTransactionsHandler : IRequestHandler<DeleteAllTransactions>
+    private readonly IDatabaseService _database;
+    private readonly ILogger _logger;
+
+    public DeleteAllTransactionsHandler(IServiceProvider serviceProvider)
     {
-        private readonly IDatabaseService _database;
-        private readonly ILogger _logger;
+        _database = serviceProvider.GetService<IDatabaseService>();
+        _logger = serviceProvider.GetService<ILogger<DeleteAllTransactionsHandler>>();
+    }
 
-        public DeleteAllTransactionsHandler(IServiceProvider serviceProvider)
+    public Task<Unit> Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Executing 'Delete All Transactions' Command");
+
+        try
         {
-            _database = serviceProvider.GetService<IDatabaseService>();
-            _logger = serviceProvider.GetService<ILogger<DeleteAllTransactionsHandler>>();
+            _database.Transactions.RemoveRange(_database.Transactions);
+            _database.Save();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error executing 'Delete All Transactions' command");
+            throw;
         }
 
-        public Task<Unit> Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Executing 'Delete All Transactions' Command");
-
-            try
-            {
-                _database.Transactions.RemoveRange(_database.Transactions);
-                _database.Save();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error executing 'Delete All Transactions' command");
-                throw;
-            }
-
-            return Unit.Task;
-        }
+        return Unit.Task;
     }
 }

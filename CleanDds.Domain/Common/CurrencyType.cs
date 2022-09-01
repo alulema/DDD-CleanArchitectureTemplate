@@ -1,10 +1,9 @@
-﻿namespace CleanDds.Domain.Common
+﻿namespace CleanDds.Domain.Common;
+
+public enum CurrencyType
 {
-    public enum CurrencyType
-    {
-        EUR = 0,
-        USD,
-        CAD,
-        AUD
-    }
+    EUR = 0,
+    USD,
+    CAD,
+    AUD
 }

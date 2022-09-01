@@ -9,32 +9,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Application.QueryStack.Rates
+namespace CleanDds.Application.QueryStack.Rates;
+
+public class GetRatesListHandler : IRequestHandler<GetRatesList, List<Rate>>
 {
-    public class GetRatesListHandler : IRequestHandler<GetRatesList, List<Rate>>
+    private readonly IDatabaseService _database;
+    private readonly ILogger _logger;
+
+    public GetRatesListHandler(IServiceProvider serviceProvider)
     {
-        private readonly IDatabaseService _database;
-        private readonly ILogger _logger;
+        _database = serviceProvider.GetService<IDatabaseService>();
+        _logger = serviceProvider.GetService<ILogger<GetRatesListHandler>>();
+    }
 
-        public GetRatesListHandler(IServiceProvider serviceProvider)
+    public Task<List<Rate>> Handle(GetRatesList request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Getting Rates List");
+
+        try
         {
-            _database = serviceProvider.GetService<IDatabaseService>();
-            _logger = serviceProvider.GetService<ILogger<GetRatesListHandler>>();
+            return _database.Rates.ToListAsync(cancellationToken: cancellationToken);
         }
-
-        public Task<List<Rate>> Handle(GetRatesList request, CancellationToken cancellationToken)
+        catch (Exception e)
         {
-            _logger.LogInformation("Getting Rates List");
-
-            try
-            {
-                return _database.Rates.ToListAsync(cancellationToken: cancellationToken);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error Getting Rates List");
-                throw;
-            }
+            _logger.LogError(e, "Error Getting Rates List");
+            throw;
         }
     }
 }

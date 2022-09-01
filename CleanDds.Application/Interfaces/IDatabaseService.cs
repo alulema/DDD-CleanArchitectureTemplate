@@ -2,13 +2,12 @@
 using CleanDds.Domain.Currencies;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanDds.Application.Interfaces
+namespace CleanDds.Application.Interfaces;
+
+public interface IDatabaseService
 {
-    public interface IDatabaseService
-    {
-        DbSet<Rate> Rates { get; set; }
-        DbSet<Transaction> Transactions { get; set; }
-        Task SaveAsync();
-        void Save();
-    }
+    DbSet<Rate> Rates { get; set; }
+    DbSet<Transaction> Transactions { get; set; }
+    Task SaveAsync();
+    void Save();
 }

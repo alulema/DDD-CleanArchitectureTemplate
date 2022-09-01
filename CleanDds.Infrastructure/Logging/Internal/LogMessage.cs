@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace CleanDds.Infrastructure.Logging.Internal
+namespace CleanDds.Infrastructure.Logging.Internal;
+
+public struct LogMessage
 {
-    public struct LogMessage
-    {
-        public DateTimeOffset Timestamp { get; set; }
-        public string Message { get; set; }
-    }
+    public DateTimeOffset Timestamp { get; set; }
+    public string Message { get; set; }
 }

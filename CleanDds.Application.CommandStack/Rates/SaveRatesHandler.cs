@@ -6,37 +6,36 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Application.CommandStack.Rates
+namespace CleanDds.Application.CommandStack.Rates;
+
+public class SaveRatesHandler : IRequestHandler<SaveRates>
 {
-    public class SaveRatesHandler : IRequestHandler<SaveRates>
+    private readonly IDatabaseService _database;
+    private readonly ILogger _logger;
+
+    public SaveRatesHandler(IServiceProvider serviceProvider)
     {
-        private readonly IDatabaseService _database;
-        private readonly ILogger _logger;
+        _database = serviceProvider.GetService<IDatabaseService>();
+        _logger = serviceProvider.GetService<ILogger<SaveRatesHandler>>();
+    }
 
-        public SaveRatesHandler(IServiceProvider serviceProvider)
+    public Task<Unit> Handle(SaveRates request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Executing 'Save Rates' Command");
+
+        try
         {
-            _database = serviceProvider.GetService<IDatabaseService>();
-            _logger = serviceProvider.GetService<ILogger<SaveRatesHandler>>();
+            foreach (var rate in request.Rates)
+                _database.Rates.Add(rate);
+
+            _database.Save();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing 'Save Rates' command");
+            throw;
         }
 
-        public Task<Unit> Handle(SaveRates request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Executing 'Save Rates' Command");
-
-            try
-            {
-                foreach (var rate in request.Rates)
-                    _database.Rates.Add(rate);
-
-                _database.Save();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error executing 'Save Rates' command");
-                throw;
-            }
-
-            return Unit.Task;
-        }
+        return Unit.Task;
     }
 }

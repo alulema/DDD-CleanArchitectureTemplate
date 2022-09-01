@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace CleanDds.Application.CommandStack.Rates
+namespace CleanDds.Application.CommandStack.Rates;
+
+public class DeleteAllRates : IRequest
 {
-    public class DeleteAllRates : IRequest
-    {
-    }
 }

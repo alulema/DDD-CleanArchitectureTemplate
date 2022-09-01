@@ -6,37 +6,36 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Application.CommandStack.Transactions
+namespace CleanDds.Application.CommandStack.Transactions;
+
+public class SaveTransactionsHandler : IRequestHandler<SaveTransactions>
 {
-    public class SaveTransactionsHandler : IRequestHandler<SaveTransactions>
+    private readonly IDatabaseService _database;
+    private readonly ILogger _logger;
+
+    public SaveTransactionsHandler(IServiceProvider serviceProvider)
     {
-        private readonly IDatabaseService _database;
-        private readonly ILogger _logger;
+        _database = serviceProvider.GetService<IDatabaseService>();
+        _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
+    }
 
-        public SaveTransactionsHandler(IServiceProvider serviceProvider)
+    public Task<Unit> Handle(SaveTransactions request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Executing 'Save Transactions' Command");
+
+        try
         {
-            _database = serviceProvider.GetService<IDatabaseService>();
-            _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
+            foreach (var transaction in request.Transactions)
+                _database.Transactions.Add(transaction);
+
+            _database.Save();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing 'Save Transactions' command");
+            throw;
         }
 
-        public Task<Unit> Handle(SaveTransactions request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Executing 'Save Transactions' Command");
-
-            try
-            {
-                foreach (var transaction in request.Transactions)
-                    _database.Transactions.Add(transaction);
-
-                _database.Save();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error executing 'Save Transactions' command");
-                throw;
-            }
-
-            return Unit.Task;
-        }
+        return Unit.Task;
     }
 }

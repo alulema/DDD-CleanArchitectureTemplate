@@ -1,10 +1,9 @@
 ﻿using CleanDds.Domain.Currencies;
 using MediatR;
 
-namespace CleanDds.Application.CommandStack.Transactions
+namespace CleanDds.Application.CommandStack.Transactions;
+
+public class SaveTransactions : IRequest
 {
-    public class SaveTransactions : IRequest
-    {
-        public Transaction[] Transactions { get; set; }
-    }
+    public Transaction[] Transactions { get; set; }
 }

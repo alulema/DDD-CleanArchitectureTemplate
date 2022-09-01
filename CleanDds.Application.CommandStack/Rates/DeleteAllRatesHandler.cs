@@ -6,35 +6,34 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CleanDds.Application.CommandStack.Rates
+namespace CleanDds.Application.CommandStack.Rates;
+
+public class DeleteAllRatesHandler : IRequestHandler<DeleteAllRates>
 {
-    public class DeleteAllRatesHandler : IRequestHandler<DeleteAllRates>
+    private readonly IDatabaseService _database;
+    private readonly ILogger _logger;
+
+    public DeleteAllRatesHandler(IServiceProvider serviceProvider)
     {
-        private readonly IDatabaseService _database;
-        private readonly ILogger _logger;
+        _database = serviceProvider.GetService<IDatabaseService>();
+        _logger = serviceProvider.GetService<ILogger<DeleteAllRatesHandler>>();
+    }
 
-        public DeleteAllRatesHandler(IServiceProvider serviceProvider)
+    public Task<Unit> Handle(DeleteAllRates request, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Executing 'Delete All Rates' Command");
+
+        try
         {
-            _database = serviceProvider.GetService<IDatabaseService>();
-            _logger = serviceProvider.GetService<ILogger<DeleteAllRatesHandler>>();
+            _database.Rates.RemoveRange(_database.Rates);
+            _database.Save();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error executing 'Delete All Rates' command");
+            throw;
         }
 
-        public Task<Unit> Handle(DeleteAllRates request, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Executing 'Delete All Rates' Command");
-
-            try
-            {
-                _database.Rates.RemoveRange(_database.Rates);
-                _database.Save();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error executing 'Delete All Rates' command");
-                throw;
-            }
-
-            return Unit.Task;
-        }
+        return Unit.Task;
     }
 }
