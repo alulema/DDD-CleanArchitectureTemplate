@@ -1,28 +1,49 @@
-﻿using System.IO;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using CleanDds.Infrastructure.Logging;
+﻿using System.Reflection;
+using CleanDds.Application.Interfaces;
+using CleanDds.Infrastructure.Seeding;
+using CleanDds.Persistance;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace CleanDds.Service;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+// Add services to the container.
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<InMemDatabaseService>(x => x.UseInMemoryDatabase("in-mem"));
+builder.Services.AddTransient<ISeedingService, SeedingService>();
+builder.Services.AddScoped<IDatabaseService, InMemDatabaseService>();
+
+builder.Services.AddMediatR(new[]
 {
-    public static IConfiguration Configuration { get; set; }
+    Assembly.Load("CleanDds.Application.CommandStack"),
+    Assembly.Load("CleanDds.Application.QueryStack")
+});
 
-    public static void Main(string[] args)
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
+var app = builder.Build();
 
-        Configuration = builder.Build();
-        BuildWebHost(args).Run();
-    }
+// Configure the HTTP request pipeline.
 
-    private static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .ConfigureLogging(builder => builder.AddFile())
-            .UseStartup<Startup>()
-            .Build();
+var seeding = app.Services.GetService<ISeedingService>();
+
+if (seeding is not null)
+{
+    seeding.SeedRates(app.Configuration["RatesUrl"]);
+    seeding.SeedTransactions(app.Configuration["TransactionsUrl"]);
 }
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();

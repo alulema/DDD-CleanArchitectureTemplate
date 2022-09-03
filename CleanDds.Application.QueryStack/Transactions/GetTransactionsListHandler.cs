@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CleanDds.Application.Interfaces;
 using CleanDds.Domain.Currencies;
+using CleanDds.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,9 @@ public class GetTransactionsListHandler : IRequestHandler<GetTransactionsList, L
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public GetTransactionsListHandler(IServiceProvider serviceProvider)
+    public GetTransactionsListHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
     {
-        _database = serviceProvider.GetService<IDatabaseService>();
+        _database = database;
         _logger = serviceProvider.GetService<ILogger<GetTransactionsListHandler>>();            
     }
     

@@ -9,6 +9,7 @@ using CleanDds.Application.ViewModels.Transactions;
 using CleanDds.Common.Numbers;
 using CleanDds.Domain.Common;
 using CleanDds.Domain.Currencies;
+using CleanDds.Persistance;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,9 +21,9 @@ public class GetTransactionsBySkuHandler : IRequestHandler<GetTransactionsBySku,
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public GetTransactionsBySkuHandler(IServiceProvider serviceProvider)
+    public GetTransactionsBySkuHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
     {
-        _database = serviceProvider.GetService<IDatabaseService>();
+        _database = database;
         _logger = serviceProvider.GetService<ILogger<GetTransactionsBySkuHandler>>();            
     }
     

@@ -17,7 +17,12 @@ public class InMemDatabaseService : DbContext, IDatabaseService
     {
         _logger = logger;
     }
-    
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseInMemoryDatabase("in-mem");
+    }
+
     public async Task SaveAsync()
     {
         _logger.LogInformation("Asynchronously saving data to in-mem database");

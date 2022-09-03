@@ -14,12 +14,14 @@ public class RestoringController : Controller
     private readonly ISeedingService _seedingService;
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
+    private readonly IConfiguration _configuration;
 
-    public RestoringController(ISeedingService seedingService, ILogger<RestoringController> logger, IMediator mediator)
+    public RestoringController(ISeedingService seedingService, ILogger<RestoringController> logger, IMediator mediator, IConfiguration configuration)
     {
         _seedingService = seedingService;
         _logger = logger;
         _mediator = mediator;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -31,8 +33,8 @@ public class RestoringController : Controller
         {
             _mediator.Send(new DeleteAllTransactions());
             _mediator.Send(new DeleteAllRates());
-            _seedingService.SeedRates(Program.Configuration["RatesUrl"]);
-            _seedingService.SeedTransactions(Program.Configuration["TransactionsUrl"]);
+            _seedingService.SeedRates(_configuration["RatesUrl"]);
+            _seedingService.SeedTransactions(_configuration["TransactionsUrl"]);
 
             return true;
         }

@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CleanDds.Application\CleanDds.Application.csproj" />
+    <ProjectReference Include="..\CleanDds.Persistance\CleanDds.Persistance.csproj" />
   </ItemGroup>
 </Project>

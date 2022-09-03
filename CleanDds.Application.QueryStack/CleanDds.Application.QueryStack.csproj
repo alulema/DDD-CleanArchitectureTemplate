@@ -9,5 +9,6 @@
     <ProjectReference Include="..\CleanDds.Application\CleanDds.Application.csproj" />
     <ProjectReference Include="..\CleanDds.Common\CleanDds.Common.csproj" />
     <ProjectReference Include="..\CleanDds.Domain\CleanDds.Domain.csproj" />
+    <ProjectReference Include="..\CleanDds.Persistance\CleanDds.Persistance.csproj" />
   </ItemGroup>
 </Project>

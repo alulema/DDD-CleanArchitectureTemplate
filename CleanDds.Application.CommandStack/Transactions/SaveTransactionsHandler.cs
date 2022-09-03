@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CleanDds.Application.Interfaces;
+using CleanDds.Persistance;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,9 +14,9 @@ public class SaveTransactionsHandler : IRequestHandler<SaveTransactions>
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public SaveTransactionsHandler(IServiceProvider serviceProvider)
+    public SaveTransactionsHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
     {
-        _database = serviceProvider.GetService<IDatabaseService>();
+        _database = database;
         _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
     }
 

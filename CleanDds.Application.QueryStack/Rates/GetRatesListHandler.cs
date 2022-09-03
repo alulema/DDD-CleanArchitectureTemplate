@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CleanDds.Application.Interfaces;
 using CleanDds.Domain.Currencies;
+using CleanDds.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,9 @@ public class GetRatesListHandler : IRequestHandler<GetRatesList, List<Rate>>
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public GetRatesListHandler(IServiceProvider serviceProvider)
+    public GetRatesListHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
     {
-        _database = serviceProvider.GetService<IDatabaseService>();
+        _database = database;
         _logger = serviceProvider.GetService<ILogger<GetRatesListHandler>>();
     }
 
