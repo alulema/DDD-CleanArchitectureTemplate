@@ -1,37 +1,49 @@
 ﻿using CleanDds.Domain.Common;
 using CleanDds.Domain.Currencies;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace CleanDds.Testing;
-
-public class SerializationTests
+namespace CleanDds.Testing
 {
-    [Fact]
-    public void TestRateToJson()
+    public class SerializationTests
     {
-        var entityTest = new Rate
+        [Fact]
+        public void RateSerialization_ShouldConvertRateObjectToJsonCorrectly()
         {
-            CurrencyFrom = CurrencyType.AUD,
-            CurrencyTo = CurrencyType.CAD,
-            CurrencyRate = 0.88m
-        };
+            // Arrange
+            var entityTest = new Rate
+            {
+                CurrencyFrom = CurrencyType.AUD,
+                CurrencyTo = CurrencyType.CAD,
+                CurrencyRate = 0.88m
+            };
 
-        var converted = JsonConvert.SerializeObject(entityTest);
-        Assert.Equal(@"{""from"":""AUD"",""to"":""CAD"",""rate"":0.88}", converted);
-    }
-    
-    [Fact]
-    public void TestTransactionToJson()
-    {
-        var entityTest = new Transaction
+            // Act
+            var converted = JsonConvert.SerializeObject(entityTest);
+
+            // Assert
+            converted.Should().Be(@"{""from"":""AUD"",""to"":""CAD"",""rate"":0.88}", 
+                because: "the serialized object should match the expected JSON string");
+        }
+        
+        [Fact]
+        public void TransactionSerialization_ShouldConvertTransactionObjectToJsonCorrectly()
         {
-            Amount = 10.23m,
-            Currency = CurrencyType.CAD,
-            Sku = "T2006"
-        };
+            // Arrange
+            var entityTest = new Transaction
+            {
+                Amount = 10.23m,
+                Currency = CurrencyType.CAD,
+                Sku = "T2006"
+            };
 
-        var converted = JsonConvert.SerializeObject(entityTest);
-        Assert.Equal(@"{""sku"":""T2006"",""amount"":10.23,""currency"":""CAD""}", converted);
+            // Act
+            var converted = JsonConvert.SerializeObject(entityTest);
+
+            // Assert
+            converted.Should().Be(@"{""sku"":""T2006"",""amount"":10.23,""currency"":""CAD""}", 
+                because: "the serialized object should match the expected JSON string");
+        }
     }
 }

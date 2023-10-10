@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CleanDds.Application.Interfaces;
-using CleanDds.Persistance;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,7 @@ public class DeleteAllRatesHandler : IRequestHandler<DeleteAllRates>
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public DeleteAllRatesHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
+    public DeleteAllRatesHandler(IServiceProvider serviceProvider, IDatabaseService database)
     {
         _database = database;
         _logger = serviceProvider.GetService<ILogger<DeleteAllRatesHandler>>();

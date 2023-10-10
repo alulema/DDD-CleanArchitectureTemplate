@@ -14,7 +14,7 @@ public class DeleteAllTransactionsHandler : IRequestHandler<DeleteAllTransaction
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public DeleteAllTransactionsHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
+    public DeleteAllTransactionsHandler(IServiceProvider serviceProvider, IDatabaseService database)
     {
         _database = database;
         _logger = serviceProvider.GetService<ILogger<DeleteAllTransactionsHandler>>();

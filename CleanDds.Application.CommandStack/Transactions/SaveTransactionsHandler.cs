@@ -14,7 +14,7 @@ public class SaveTransactionsHandler : IRequestHandler<SaveTransactions>
     private readonly IDatabaseService _database;
     private readonly ILogger _logger;
 
-    public SaveTransactionsHandler(IServiceProvider serviceProvider, InMemDatabaseService database)
+    public SaveTransactionsHandler(IServiceProvider serviceProvider, IDatabaseService database)
     {
         _database = database;
         _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
