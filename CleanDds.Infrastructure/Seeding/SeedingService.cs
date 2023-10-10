@@ -32,9 +32,14 @@ public class SeedingService : ISeedingService
         try
         {
             List<Rate> additionalRates = new List<Rate>();
-            HttpClient client = new HttpClient();
-            var json = await client.GetStringAsync(ratesUrl);
-            var rates = JsonConvert.DeserializeObject<Rate[]>(json);
+            // HttpClient client = new HttpClient();
+            // var json = await client.GetStringAsync(ratesUrl);
+            // var rates = JsonConvert.DeserializeObject<Rate[]>(json);
+            var rates = new[]
+            {
+                new Rate {CurrencyFrom = CurrencyType.AUD, CurrencyTo = CurrencyType.CAD, CurrencyRate = 1.0079m},
+                new Rate {CurrencyFrom = CurrencyType.CAD, CurrencyTo = CurrencyType.USD, CurrencyRate = 1.0090m}
+            };
 
             foreach (var rate in rates)
                 rate.Id = Guid.NewGuid();
@@ -106,9 +111,14 @@ public class SeedingService : ISeedingService
 
         try
         {
-            HttpClient client = new HttpClient();
-            var json = await client.GetStringAsync(transactionsUrl);
-            var transactions = JsonConvert.DeserializeObject<Transaction[]>(json);
+            // HttpClient client = new HttpClient();
+            // var json = await client.GetStringAsync(transactionsUrl);
+            // var transactions = JsonConvert.DeserializeObject<Transaction[]>(json);
+            var transactions = new[]
+            {
+                new Transaction {Sku = "A", Amount = 10, Currency = CurrencyType.USD},
+                new Transaction {Sku = "B", Amount = 15, Currency = CurrencyType.CAD}
+            };
 
             foreach (var transaction in transactions)
                 transaction.Id = Guid.NewGuid();
