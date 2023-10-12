@@ -19,7 +19,7 @@ public class SaveRatesHandler : IRequestHandler<SaveRates>
         _logger = serviceProvider.GetService<ILogger<SaveRatesHandler>>();
     }
 
-    public Task<Unit> Handle(SaveRates request, CancellationToken cancellationToken)
+    public Task Handle(SaveRates request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing 'Save Rates' Command");
 

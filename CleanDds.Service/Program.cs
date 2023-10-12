@@ -2,7 +2,6 @@
 using CleanDds.Application.Interfaces;
 using CleanDds.Infrastructure.Seeding;
 using CleanDds.Persistance;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +15,10 @@ builder.Services.AddDbContext<InMemDatabaseService>(x => x.UseInMemoryDatabase("
 builder.Services.AddTransient<ISeedingService, SeedingService>();
 builder.Services.AddScoped<IDatabaseService, InMemDatabaseService>();
 
-builder.Services.AddMediatR(new[]
-{
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     Assembly.Load("CleanDds.Application.CommandStack"),
     Assembly.Load("CleanDds.Application.QueryStack")
-});
+));
 
 var app = builder.Build();
 

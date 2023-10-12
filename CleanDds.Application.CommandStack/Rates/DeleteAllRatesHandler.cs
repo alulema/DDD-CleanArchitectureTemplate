@@ -19,7 +19,7 @@ public class DeleteAllRatesHandler : IRequestHandler<DeleteAllRates>
         _logger = serviceProvider.GetService<ILogger<DeleteAllRatesHandler>>();
     }
 
-    public Task<Unit> Handle(DeleteAllRates request, CancellationToken cancellationToken)
+    public Task Handle(DeleteAllRates request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing 'Delete All Rates' Command");
 

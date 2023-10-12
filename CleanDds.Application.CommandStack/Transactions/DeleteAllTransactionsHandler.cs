@@ -20,7 +20,7 @@ public class DeleteAllTransactionsHandler : IRequestHandler<DeleteAllTransaction
         _logger = serviceProvider.GetService<ILogger<DeleteAllTransactionsHandler>>();
     }
 
-    public Task<Unit> Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
+    public Task Handle(DeleteAllTransactions request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing 'Delete All Transactions' Command");
 

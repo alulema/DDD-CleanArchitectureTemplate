@@ -20,7 +20,7 @@ public class SaveTransactionsHandler : IRequestHandler<SaveTransactions>
         _logger = serviceProvider.GetService<ILogger<SaveTransactionsHandler>>();
     }
 
-    public Task<Unit> Handle(SaveTransactions request, CancellationToken cancellationToken)
+    public Task Handle(SaveTransactions request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing 'Save Transactions' Command");
 
